@@ -1,0 +1,139 @@
+* { 
+    margin: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.wrapper {
+    height: 100vh;
+
+}
+
+.main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.list {
+    /* border: 1px solid rgb(175, 175, 175); */
+    box-shadow: 0 0 20px rgb(182, 182, 182);
+    border-radius: 20px;
+    padding: 10px;
+    display: flex;
+    flex-grow: 0;
+}
+
+.list__itemsContainer {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.list__itemsContainer__item {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.list__itemsContainer__item__text {
+    width: 200px;
+    background-color: rgb(220, 220, 220);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    color:rgb(55, 55, 55);
+}
+
+
+
+.list__itemsContainer__item__numbers {
+    width: 200px;
+    background-color: rgb(220, 220, 220);
+    border-radius:10px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: larger;
+    color:rgb(55, 55, 55);
+}
+
+.list__itemsContainer__item__button {
+
+    background-color: rgb(220, 220, 220);
+    
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    transition: 0.3s ease-out;
+}
+
+.list__itemsContainer__item__button:hover {
+    background-color:rgb(186, 186, 186) ;
+    /* box-shadow: 0 0 10px rgb(86, 86, 86); */
+}
+
+.list__itemsContainer__item__button__svg {
+    width: 30px;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+}
+
+.buttonsContainer__button {
+    background-color: white;
+    box-shadow: 0 0 20px rgb(182, 182, 182);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    text-decoration: none;
+    color:rgb(55, 55, 55);
+    transition: 0.3s ease-out;
+}
+
+.buttonsContainer__button:hover {
+    /* background-color:rgb(119, 131, 255) ; */
+    box-shadow: 0 0 20px rgb(50, 50, 50);
+    /* color:rgb(255, 255, 255); */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
