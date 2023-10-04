@@ -30,6 +30,15 @@
     flex-direction: column;
     min-height: 40px;
     min-width: 510px;
+
+    /* align-items: center;
+    justify-content: center; */
+}
+
+.list__itemsContainer__initialItem {
+    margin: auto;
+    font-style: italic;
+    color:rgb(192, 192, 192);
 }
 
 .list__itemsContainer__item {

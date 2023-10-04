@@ -1,5 +1,6 @@
 "use strict"
 
+const initialItem = document.querySelector(".list__itemsContainer__initialItem")
 const itemsContainer = document.getElementById("itemsContainer")
 const addItemBtn = document.getElementById("addItemBtn")
 const saveBtn = document.getElementById("saveBtn")
@@ -17,6 +18,18 @@ const data = [
 function swapItemsStandart(node1, node2) { // первый элемент меняется местами со вторым 
     node1.parentNode.replaceChild(node1, node2);
     node1.parentNode.insertBefore(node2, node1); 
+}
+
+function itemsListEmptynessCheck() {
+    const items = itemsContainer.querySelectorAll(".list__itemsContainer__item")
+
+
+    if (items.length === 0) {
+        initialItem.style.display = "none"
+        itemsContainer.appendChild(initialItem)
+        $(".list__itemsContainer__initialItem").fadeIn(100)
+        return true
+    }
 }
 
 function listHeightAnimation(animationType) {
@@ -284,6 +297,7 @@ function addItem(counter) {
     
             listHeightAnimation("reduction").then( function() { // анимация уменьшения бокса
                 itemsContainer.removeChild(blankItem)
+                itemsListEmptynessCheck()
             })
         })
     })
@@ -293,6 +307,12 @@ function addItem(counter) {
 
 let counter = 0;
 addItemBtn.addEventListener("click", () => {
+
+    if (itemsListEmptynessCheck()) {
+        $(".list__itemsContainer__initialItem").fadeOut(300)
+        itemsContainer.removeChild(initialItem)
+    }
+
     if (counter <= 6) {
 
         listHeightAnimation("grow").then( function() {
@@ -371,6 +391,7 @@ saveBtn.addEventListener("mouseup", () => {
 saveBtn.addEventListener("mouseout", () => {
     saveBtn.style.backgroundColor = "white"
 })
+
 
 
 
