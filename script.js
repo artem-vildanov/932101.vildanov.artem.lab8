@@ -312,16 +312,24 @@ addItemBtn.addEventListener("click", () => {
 })
 
 addItemBtn.addEventListener("mousedown", () => {
-    addItemBtn.style.backgroundColor = "rgb(191, 191, 191)"
+    if (counter <= 6) {
+        addItemBtn.style.backgroundColor = "rgb(220, 220, 220)"
+    }
 })
 
 addItemBtn.addEventListener("mouseup", () => {
-    addItemBtn.style.backgroundColor = "rgb(191, 191, 191)"
+    if (counter <= 6) {
+        addItemBtn.style.backgroundColor = "rgb(220, 220, 220)"
 
-    setTimeout(() => {
+        setTimeout(() => {
+    
+            addItemBtn.style.backgroundColor = "white"
+        }, 150)
+    }
+})
 
-        addItemBtn.style.backgroundColor = "white"
-    }, 100)
+addItemBtn.addEventListener("mouseout", () => {
+    addItemBtn.style.backgroundColor = "white"
 })
 
 saveBtn.addEventListener("click", () => {
@@ -347,7 +355,22 @@ saveBtn.addEventListener("click", () => {
 
 })
 
+saveBtn.addEventListener("mousedown", () => {
+    saveBtn.style.backgroundColor = "rgb(220, 220, 220)"
+})
 
+saveBtn.addEventListener("mouseup", () => {
+    saveBtn.style.backgroundColor = "rgb(220, 220, 220)"
+
+    setTimeout(() => {
+
+        saveBtn.style.backgroundColor = "white"
+    }, 150)
+})
+
+saveBtn.addEventListener("mouseout", () => {
+    saveBtn.style.backgroundColor = "white"
+})
 
 
 
