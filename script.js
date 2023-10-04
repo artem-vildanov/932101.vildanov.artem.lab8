@@ -1,11 +1,6 @@
 "use strict"
 
-function swapItems(node1, node2) { // первый элемент меняется местами со вторым 
-    node1.parentNode.replaceChild(node1, node2);
-    node1.parentNode.insertBefore(node2, node1); 
-}
-
-const itemsContainer = document.querySelector(".list__itemsContainer")
+const itemsContainer = document.getElementById("itemsContainer")
 const addItemBtn = document.getElementById("addItemBtn")
 const saveBtn = document.getElementById("saveBtn")
 
@@ -19,12 +14,221 @@ const data = [
     ["седьмой", "901"]
 ]
 
-let counter = 0;
-addItemBtn.addEventListener("click", () => {
-    let currentData = data[counter]
-    
+function swapItemsStandart(node1, node2) { // первый элемент меняется местами со вторым 
+    node1.parentNode.replaceChild(node1, node2);
+    node1.parentNode.insertBefore(node2, node1); 
+}
 
+function listHeightAnimation(animationType) {
+    return new Promise(function(resolve, reject) {
+        const itemsAmount = itemsContainer.children.length
+
+        if (itemsAmount === 0) {
+            resolve()
+        }
+        else {
+
+            if (animationType === "grow") {
+                let heightChange = 0
+    
+                const currentHeight = itemsContainer.offsetHeight
+                const heightGrowGoal = 40 + currentHeight
+        
+                const interval = setInterval(() => {
+                    heightChange = heightChange + 2
+                    const newHeight = currentHeight + heightChange
+
+                    itemsContainer.style.height = newHeight + "px"
+        
+                    if(newHeight > heightGrowGoal) {
+                        itemsContainer.style.height = heightGrowGoal + "px"
+
+                        resolve()
+                        clearInterval(interval)
+                    }
+        
+                    
+                }, 10)
+            } 
+
+            else if (animationType === "reduction") {
+                let heightChange = 0
+    
+                const currentHeight = itemsContainer.offsetHeight
+                const heightReductionGoal = currentHeight - 40
+            
+                const interval = setInterval(() => {
+                    heightChange = heightChange + 2
+                    const newHeight = currentHeight - heightChange
+
+                    itemsContainer.style.height = newHeight + "px"
+            
+                    if(newHeight < heightReductionGoal) {
+                        itemsContainer.style.height = heightReductionGoal + "px"
+                        resolve()
+                        clearInterval(interval)
+                    }
+            
+                    
+                }, 10)
+            }
+        }
+    })
+}
+
+function itemOpacityAnimation(item, animationType) {
+
+    return new Promise(function(resolve, reject) {
+
+        if (animationType === "grow") {
+            const currentOpacity = 0
+            const opacityGoal = 1
+            let opacityChange = 0
+        
+            const interval = setInterval(() => {
+                opacityChange = opacityChange + 0.03
+                let newOpacity = currentOpacity + opacityChange
+                item.style.opacity = newOpacity
+        
+                if(newOpacity > opacityGoal) {
+                    
+                    item.style.opacity = 1
+                    clearInterval(interval)
+                    resolve()
+                }
+        
+            }, 10)
+        }
+    
+        else if (animationType === "reduction") {
+            const currentOpacity = 1
+            const opacityGoal = 0
+            let opacityChange = 0
+        
+            const interval = setInterval(() => {
+                opacityChange = opacityChange + 0.03
+                let newOpacity = currentOpacity - opacityChange
+                item.style.opacity = newOpacity
+        
+                if(newOpacity < opacityGoal) {
+                    item.style.opacity = 0
+                    clearInterval(interval)
+                    resolve()
+                }
+        
+            }, 10)
+        }
+    })
+}
+
+function swapItems(item, swapDirection) {
+    if (swapDirection === "top") {
+
+        const topBlankItem = document.createElement("div")
+        topBlankItem.classList.add("list__itemsContainer__item__blankItem")
+
+        const bottomBlankItem = document.createElement("div")
+        bottomBlankItem.classList.add("list__itemsContainer__item__blankItem")
+        bottomBlankItem.style.height = "0"
+
+        const itemAbove = item.previousElementSibling // элемент (сверху) с которым будет меняться местами выбранный элемент
+        itemOpacityAnimation(itemAbove, "reduction").then( () => {
+            swapItemsAnimation(item, topBlankItem, bottomBlankItem, itemAbove, swapDirection).then(() => {
+                itemsContainer.removeChild(topBlankItem)
+                itemsContainer.replaceChild(itemAbove, bottomBlankItem)
+                itemOpacityAnimation(itemAbove, "grow")
+            })
+        })
+
+    }
+
+    else if (swapDirection === "bottom") {
+        const topBlankItem = document.createElement("div")
+        topBlankItem.classList.add("list__itemsContainer__item__blankItem")
+        topBlankItem.style.height = "0"
+
+        const bottomBlankItem = document.createElement("div")
+        bottomBlankItem.classList.add("list__itemsContainer__item__blankItem")
+
+        const itemBelow = item.nextElementSibling // элемент (снизу) с которым будет меняться местами выбранный элемент
+        itemOpacityAnimation(itemBelow, "reduction").then( () => {
+            swapItemsAnimation(item, topBlankItem, bottomBlankItem, itemBelow, swapDirection).then(() => {
+                itemsContainer.removeChild(bottomBlankItem)
+                itemsContainer.replaceChild(itemBelow, topBlankItem)
+                itemOpacityAnimation(itemBelow, "grow")
+            })
+        })
+    }
+}
+
+function swapItemsAnimation (item, topBlankItem, bottomBlankItem, neighbourItem, animationType) {
+
+    if (animationType === "top") {
+        return new Promise(function(resolve, reject) {
+            itemsContainer.replaceChild(topBlankItem, neighbourItem)
+            item.insertAdjacentElement("afterend",bottomBlankItem);
+
+            let currentBottomBlankItemHeight = 0
+            let currentTopBlankItemHeight = 40
+            let heightChange = 0
+
+            const interval = setInterval(() => {
+                heightChange = heightChange + 1.5
+
+                const newBottomBlankItemHeight = currentBottomBlankItemHeight + heightChange
+                const newTopBlankItemHeight = currentTopBlankItemHeight - heightChange
+
+                if (newBottomBlankItemHeight >= 40 && newTopBlankItemHeight <= 0) {
+                    topBlankItem.style.height = 0 + "px"
+                    bottomBlankItem.style.height = 40 + "px"
+                    clearInterval(interval)
+                    resolve()
+                }
+
+                topBlankItem.style.height = newTopBlankItemHeight + "px"
+                bottomBlankItem.style.height = newBottomBlankItemHeight + "px"
+
+            }, 10)
+        })
+    }
+
+    else if (animationType === "bottom") {
+
+        return new Promise(function(resolve, reject) {
+            itemsContainer.replaceChild(bottomBlankItem, neighbourItem)
+            item.insertAdjacentElement("beforebegin",topBlankItem);
+
+            let currentBottomBlankItemHeight = 40
+            let currentTopBlankItemHeight = 0
+            let heightChange = 0
+
+            const interval = setInterval(() => {
+                heightChange = heightChange + 1.5
+
+                const newBottomBlankItemHeight = currentBottomBlankItemHeight - heightChange
+                const newTopBlankItemHeight = currentTopBlankItemHeight + heightChange
+
+                if (newBottomBlankItemHeight <= 0 && newTopBlankItemHeight >= 40) {
+                    topBlankItem.style.height = 40 + "px"
+                    bottomBlankItem.style.height = 0 + "px"
+                    clearInterval(interval)
+                    resolve()
+                }
+
+                topBlankItem.style.height = newTopBlankItemHeight + "px"
+                bottomBlankItem.style.height = newBottomBlankItemHeight + "px"
+
+            }, 10)
+        })
+
+    }
+       
+}
+
+
+function addItem(counter) {
     const item = document.createElement("div")
+    let currentData = data[counter]
     item.classList.add("list__itemsContainer__item")
     item.id = counter;
 
@@ -47,31 +251,66 @@ addItemBtn.addEventListener("click", () => {
     item.innerHTML = itemInnerHtml
     itemsContainer.appendChild(item)
 
+    itemOpacityAnimation(item, "grow") // анимация появления
+
     const moveTopBtn = document.querySelector('[move-top-btn-id="' + counter + '"]')
     const moveBottomBtn = document.querySelector('[move-bottom-btn-id="' + counter + '"]')
     const deleteBtn = document.querySelector('[delete-btn-id="' + counter + '"]')
 
     moveTopBtn.addEventListener("click", () => {
         if (itemsContainer.querySelectorAll(".list__itemsContainer__item").length > 1) {
-            const itemAbove = item.previousElementSibling
-            swapItems(itemAbove, item)
+            // const itemAbove = item.previousElementSibling
+            // swapItemsStandart(itemAbove, item)
 
+            swapItems(item, "top")
         }
     })
 
     moveBottomBtn.addEventListener("click", () => {
         if (itemsContainer.querySelectorAll(".list__itemsContainer__item").length > 1) {
-            const itemBelow = item.nextElementSibling
-            swapItems(item, itemBelow)
-            
+            // const itemBelow = item.nextElementSibling
+            // swapItemsStandart(item, itemBelow)
+
+            swapItems(item, "bottom")
         }
     })
 
     deleteBtn.addEventListener("click", () => {
-        itemsContainer.removeChild(item)
-    })
 
-    counter++
+        itemOpacityAnimation(item, "reduction").then(function() { // анимация исчезновения элемента
+            const blankItem = document.createElement("div")
+            blankItem.classList.add("list__itemsContainer__item__blankItem")
+            itemsContainer.replaceChild(blankItem, item)
+    
+            listHeightAnimation("reduction").then( function() { // анимация уменьшения бокса
+                itemsContainer.removeChild(blankItem)
+            })
+        })
+    })
+}
+
+
+
+let counter = 0;
+addItemBtn.addEventListener("click", () => {
+    if (counter <= 6) {
+        listHeightAnimation("grow").then( function() {
+            addItem(counter)
+            counter++
+        })
+    }
+
+    //const initialHeight = itemsContainer.offsetHeight
+
+
+
+  
+
+    //console.log(itemsContainer.offsetWidth)
+
+    // const newHeight = itemsContainer.offsetHeight
+    // const heightChange = newHeight - initialHeight
+    // console.log(heightChange)
 })
 
 

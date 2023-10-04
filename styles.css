@@ -28,7 +28,8 @@
 .list__itemsContainer {
     display: flex;
     flex-direction: column;
-
+    min-height: 40px;
+    min-width: 510px;
 }
 
 .list__itemsContainer__item {
@@ -36,6 +37,15 @@
     flex-direction: row;
     margin-bottom: 5px;
     margin-top: 5px;
+    flex-shrink: 0;
+    opacity: 0;
+}
+
+.list__itemsContainer__item__blankItem {
+    height: 40px;
+    width: 100px;
+    /* background-color: black; */
+    flex-shrink: 10;
 }
 
 .list__itemsContainer__item__text {
