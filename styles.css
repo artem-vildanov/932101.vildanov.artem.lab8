@@ -82,6 +82,7 @@
     align-items: center;
     margin-left: 5px;
     transition: 0.3s ease-out;
+    
 }
 
 .list__itemsContainer__item__button:hover {
@@ -116,6 +117,18 @@
     /* background-color:rgb(119, 131, 255) ; */
     box-shadow: 0 0 20px rgb(50, 50, 50);
     /* color:rgb(255, 255, 255); */
+}
+
+.jsonOutputContainer {
+    width: 300px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.jsonOutputContainer__jsonOutput {
+    display: none;
+    position: fixed;
 }
 
 

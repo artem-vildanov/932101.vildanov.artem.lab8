@@ -294,26 +294,58 @@ function addItem(counter) {
 let counter = 0;
 addItemBtn.addEventListener("click", () => {
     if (counter <= 6) {
+
         listHeightAnimation("grow").then( function() {
             addItem(counter)
             counter++
         })
+    } 
+    
+    else {
+        addItemBtn.style.transform = "scale(1.05)"
+
+        setTimeout(() => {
+            addItemBtn.style.transform = "scale(1)";
+        }, 200);
+
     }
-
-    //const initialHeight = itemsContainer.offsetHeight
-
-
-
-  
-
-    //console.log(itemsContainer.offsetWidth)
-
-    // const newHeight = itemsContainer.offsetHeight
-    // const heightChange = newHeight - initialHeight
-    // console.log(heightChange)
 })
 
+addItemBtn.addEventListener("mousedown", () => {
+    addItemBtn.style.backgroundColor = "rgb(191, 191, 191)"
+})
 
+addItemBtn.addEventListener("mouseup", () => {
+    addItemBtn.style.backgroundColor = "rgb(191, 191, 191)"
+
+    setTimeout(() => {
+
+        addItemBtn.style.backgroundColor = "white"
+    }, 100)
+})
+
+saveBtn.addEventListener("click", () => {
+    $(".jsonOutputContainer__jsonOutput").fadeOut(200)
+    setTimeout(() => {
+        let dataSet = { }
+    
+        const items = Array.from(itemsContainer.children)
+        items.forEach(item => {
+            const itemText = item.querySelector(".list__itemsContainer__item__text").textContent.trim()
+            const itemNumbers = item.querySelector(".list__itemsContainer__item__numbers").textContent.trim()
+
+            dataSet[itemText] = itemNumbers
+        });
+
+        const jsonDataSet = JSON.stringify(dataSet, null, 4)
+
+        const jsonOutput = document.querySelector(".jsonOutputContainer__jsonOutput")
+        jsonOutput.textContent = jsonDataSet
+
+        $(".jsonOutputContainer__jsonOutput").fadeIn(200)
+    }, 200)
+
+})
 
 
 
